@@ -59,10 +59,11 @@
                     </thead>
                 }
                 <tbody class="mud-table-body">
+                    @{ var currentPageItems = CurrentPageItems?.ToList(); }
                     @if (Loading)
                     {
                         <tr>
-                            <td colspan="1000" class="@(CurrentPageItems.Count() > 0 || LoadingContent != null ? "mud-table-loading" : "")">
+                            <td colspan="1000" class="@(currentPageItems.Count > 0 || LoadingContent != null ? "mud-table-loading" : "")">
                                 <MudProgressLinear Color="@LoadingProgressColor" Class="mud-table-loading-progress" Indeterminate="true" />
                             </td>
                         </tr>
@@ -79,10 +80,10 @@
                     }
                     else
                     {
-                        @if (CurrentPageItems != null && CurrentPageItems.Count() > 0)
+                        @if (currentPageItems != null && currentPageItems.Count > 0)
                         {
                             var rowIndex = 0;
-                            <MudVirtualize IsEnabled="@Virtualize" Items="@CurrentPageItems?.ToList()" Context="item">
+                            <MudVirtualize IsEnabled="@Virtualize" Items="@currentPageItems" Context="item">
                                @{ var rowClass = new CssBuilder(RowClass).AddClass(RowClassFunc?.Invoke(item, rowIndex)).Build(); }
                                @{ var rowStyle = new StyleBuilder().AddStyle(RowStyle).AddStyle(RowStyleFunc?.Invoke(item, rowIndex)).Build(); }
                                <MudTr Class="@rowClass" Style="@rowStyle" Item="item" @key="item" IsCheckable="MultiSelection" IsEditable="IsEditable"
@@ -126,7 +127,7 @@
                             </MudVirtualize>
                         }
                     }
-                    @if(!(CurrentPageItems != null && CurrentPageItems.Count() > 0)
+                    @if (!(currentPageItems != null && currentPageItems.Count > 0)
                         && (Loading ? LoadingContent != null : NoRecordsContent != null)
                     )
                     {
